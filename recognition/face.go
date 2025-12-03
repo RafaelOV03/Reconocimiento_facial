@@ -60,17 +60,19 @@ func LoadFromFile(imagePath string) (bool, []face.Face) {
 }
 
 // CompareFaces compara dos descriptores faciales y retorna la distancia
-func CompareFaces(desc1, desc2 face.Descriptor) float32 {
+func CompareFaces(desc1, desc2 face.Face) float32 {
 	var sum float32
-	for i := range desc1 {
-		diff := desc1[i] - desc2[i]
+	for i := range desc1.Descriptor {
+		diff := desc1.Descriptor[i] - desc2.Descriptor[i]
 		sum += diff * diff
 	}
 	return sum
 }
 
 // IsSamePerson determina si dos rostros pertenecen a la misma persona
-func IsSamePerson(desc1, desc2 face.Descriptor) bool {
+func IsSamePerson(desc1, desc2 face.Face) bool {
 	distance := CompareFaces(desc1, desc2)
 	return distance < tolerance
 }
+
+type Face face.Face
