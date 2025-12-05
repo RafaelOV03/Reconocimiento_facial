@@ -19,6 +19,6 @@ sudo pacman -S dlib blas lapack libjpeg-turbo
 
 ## Funcionamiento
 ```bash
-main.go < Nombre de la imagen jpg >
+go run main.go < Nombre de la imagen jpg >
 ```
 El programa comparara la cara con la ultima cargada, te dira si son de la misma persona, y la nueva cara se guardara para la proxima comparacion
