@@ -11,8 +11,10 @@ const (
 	// Directorios de modelos pre-entrenados de dlib
 	modelDir = "./models"
 	// Umbral de similitud para considerar un rostro como coincidente
-	tolerance = 0.4
+	tolerance = 0.3
 )
+
+type Face face.Face
 
 func LoadFromFile(imagePath string) (bool, []face.Face) {
 
@@ -34,33 +36,11 @@ func LoadFromFile(imagePath string) (bool, []face.Face) {
 		fmt.Println("No se detectaron rostros en la imagen.")
 		return false, nil
 	}
-
-	// Mostrar resultados
-	/*for i, f := range faces {
-		fmt.Printf("Rostro #%d:\n", i+1)
-		fmt.Printf("  Ubicación: X=%d, Y=%d, Ancho=%d, Alto=%d\n",
-			f.Rectangle.Min.X, f.Rectangle.Min.Y,
-			f.Rectangle.Dx(), f.Rectangle.Dy())
-		fmt.Printf("  Descriptor facial (128D): [%.3f, %.3f, %.3f, ...] (%d dimensiones)\n",
-			f.Descriptor[0], f.Descriptor[1], f.Descriptor[2], len(f.Descriptor))
-		fmt.Println()
-	}*/
-	// Obtener la cara mas grande
-	/*var face face.Face
-	max := 0
-	for _, f := range faces {
-		area := f.Rectangle.Dx() * f.Rectangle.Dy()
-		if area > max {
-			max = area
-			face = f
-		}
-	}*/
-	// Guardar descriptores para comparación futura
 	return true, faces
 }
 
 // CompareFaces compara dos descriptores faciales y retorna la distancia
-func CompareFaces(desc1, desc2 face.Face) float32 {
+func CompareFaces(desc1, desc2 Face) float32 {
 	var sum float32
 	for i := range desc1.Descriptor {
 		diff := desc1.Descriptor[i] - desc2.Descriptor[i]
@@ -70,9 +50,7 @@ func CompareFaces(desc1, desc2 face.Face) float32 {
 }
 
 // IsSamePerson determina si dos rostros pertenecen a la misma persona
-func IsSamePerson(desc1, desc2 face.Face) bool {
+func IsSamePerson(desc1, desc2 Face) bool {
 	distance := CompareFaces(desc1, desc2)
 	return distance < tolerance
 }
-
-type Face face.Face

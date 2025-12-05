@@ -1,17 +1,11 @@
 # Archivos generados
 descriptores.txt
 
-# Modelos de dlib
-models/
-
 # Binarios
 reconocimiento-facial
 
 # Imágenes de prueba
-*.jpg
-*.jpeg
-*.png
-*.bmp
+Prueba
 
 # Go
 go.sum
