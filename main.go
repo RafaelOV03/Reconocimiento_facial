@@ -8,7 +8,7 @@ import (
 )
 
 func save(face recognition.Face, filename string) error {
-	log.Println("Saving...")
+	log.Println("Guardando...")
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
@@ -25,22 +25,14 @@ func save(face recognition.Face, filename string) error {
 const fileName = "decriptor.json"
 
 func main() {
-	log.Println("---")
-	response, faces := recognition.LoadFromFile(os.Args[1])
+	filename := os.Args[1]
+	response, faces := recognition.LoadFromFile(filename)
 	if !response {
-		log.Fatalf("No se encontro ningun rostro en: %s", os.Args[1])
+		log.Fatalf("No se encontro ningun rostro en: %s", filename)
 		return
 	}
 	// Obtener la cara mas grande
-	var face recognition.Face
-	max := 0
-	for _, f := range faces {
-		area := f.Rectangle.Dx() * f.Rectangle.Dy()
-		if area > max {
-			max = area
-			face = recognition.Face(f)
-		}
-	}
+	face := recognition.GetBiggerFace(faces)
 
 	// Leer descriptor guardado en descriptores.txt
 	file, err := os.Open(fileName)

@@ -5,7 +5,7 @@ descriptores.txt
 reconocimiento-facial
 
 # Imágenes de prueba
-Prueba
+Prueba/*
 
 # Go
 go.sum

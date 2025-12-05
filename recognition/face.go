@@ -16,7 +16,7 @@ const (
 
 type Face face.Face
 
-func LoadFromFile(imagePath string) (bool, []face.Face) {
+func LoadFromFile(imagePath string) (bool, []Face) {
 
 	// Inicializar el reconocedor facial con los modelos de dlib
 	rec, err := face.NewRecognizer(modelDir)
@@ -36,7 +36,13 @@ func LoadFromFile(imagePath string) (bool, []face.Face) {
 		fmt.Println("No se detectaron rostros en la imagen.")
 		return false, nil
 	}
-	return true, faces
+
+	// Convertir []face.Face a []Face
+	result := make([]Face, len(faces))
+	for i, f := range faces {
+		result[i] = Face(f)
+	}
+	return true, result
 }
 
 // CompareFaces compara dos descriptores faciales y retorna la distancia
@@ -53,4 +59,18 @@ func CompareFaces(desc1, desc2 Face) float32 {
 func IsSamePerson(desc1, desc2 Face) bool {
 	distance := CompareFaces(desc1, desc2)
 	return distance < tolerance
+}
+
+// GetBiggerFace retorna el rostro con el área más grande de una lista de rostros
+func GetBiggerFace(faces []Face) Face {
+	var face Face
+	max := 0
+	for _, f := range faces {
+		area := f.Rectangle.Dx() * f.Rectangle.Dy()
+		if area > max {
+			max = area
+			face = f
+		}
+	}
+	return face
 }
